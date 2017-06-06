@@ -6,7 +6,8 @@ DBNAME="cedr"
 DBHOST="localhost"
 CURPWD=$(pwd)
 SHELLCMD="mysql -u$DBUSER -p$DBPASS -h$DBHOST $DBNAME -Be"
-MYSQLCMD="\"LOAD DATA LOCAL INFILE 'FPATH' INTO TABLE $DBNAME.TABLENAME FIELDS TERMINATED BY ',' IGNORE 1 ROWS;\""
+MYSQLPRECMD="TRUNCATE $DBNAME.TABLENAME;"
+MYSQLCMD="LOAD DATA LOCAL INFILE 'FPATH' INTO TABLE $DBNAME.TABLENAME CHARACTER SET UTF8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' IGNORE 1 ROWS;"
 
 PROTOTYPES=$(cat download.sh | awk '{print $3}' | grep "csv.7z" | awk -F '/' '{print $NF}' | sed 's/\.csv\.7z//gi' | tr -d '"')
 PROTOTYPES+=( "ciselnikUcelZnak_DotacniTitulv01" "ciselnikDotaceTitul_StatniRozpocetUkazatelv01" "ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01" )
@@ -18,9 +19,11 @@ PROTOTYPES+=( "ciselnikUcelZnak_DotacniTitulv01" "ciselnikDotaceTitul_StatniRozp
 
 for prot in ${PROTOTYPES[@]}; do
   TOMERGE="$(ls -1 ./CSV/${prot}*)"
+  echo $(echo $MYSQLPRECMD | sed "s/TABLENAME/$prot/gi") >> sql
   for file in ${TOMERGE}; do
     MCMD=$(echo $MYSQLCMD | sed "s|FPATH|$file|gi" | sed "s/TABLENAME/$prot/gi")
-    echo "$(eval ${SHELLCMD} ${MCMD})"
+    echo $MCMD >> sql
+    #eval ${SHELLCMD} ${MCMD}
     #exit 0
   done
 done
