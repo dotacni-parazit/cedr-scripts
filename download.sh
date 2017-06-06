@@ -1,8 +1,9 @@
 #!/bin/bash
 
 PARAMS="-c -nv -P 7Z/"
-PARAMS_CISELNIK="-c -nv -P 7Z_CISELNIK/"
 DOWNLOADER="wget"
+
+mkdir -p 7Z
 
 # Source: http://cedr.mfcr.cz/cedr3internetv419/OpenData/OpenDataDumpPage.aspx
 
