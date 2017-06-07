@@ -48,6 +48,7 @@ $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikStatv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikPravniFormav01.csv.7z"
 
 ## RUIAN
+$DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikKrajv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMestskyObvodMestskaCastv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikObecv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikOkresv01.csv.7z"
