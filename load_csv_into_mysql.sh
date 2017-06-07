@@ -17,8 +17,10 @@ PROTOTYPES+=( "ciselnikUcelZnak_DotacniTitulv01" "ciselnikDotaceTitul_StatniRozp
 #done
 #exit 0
 
+shopt -s extglob
+
 for prot in ${PROTOTYPES[@]}; do
-  TOMERGE="$(ls -1 ./CSV/${prot}*)"
+  TOMERGE="$(ls -1 ./CSV/${prot}+([0-9]).csv)"
   echo $(echo $MYSQLPRECMD | sed "s/TABLENAME/$prot/gi") >> sql
   for file in ${TOMERGE}; do
     MCMD=$(echo $MYSQLCMD | sed "s|FPATH|$file|gi" | sed "s/TABLENAME/$prot/gi")
