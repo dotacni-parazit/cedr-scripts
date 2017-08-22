@@ -1,3 +1,6 @@
 /7Z
 /CSV
 
+generateCsv.7Z
+*.bat
+/sql
