@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 06, 2017 at 10:41 AM
--- Server version: 10.1.23-MariaDB-1~stretch
+-- Generation Time: Aug 22, 2017 at 07:04 PM
+-- Server version: 10.1.26-MariaDB-1~stretch
 -- PHP Version: 7.0.19-1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -12,15 +12,10 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Database: `cedr`
 --
+DROP DATABASE IF EXISTS `cedr`;
 CREATE DATABASE IF NOT EXISTS `cedr` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `cedr`;
 
@@ -91,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `AdresaSidlo` (
 DROP TABLE IF EXISTS `ciselnikCedrCinnostTypev01`;
 CREATE TABLE IF NOT EXISTS `ciselnikCedrCinnostTypev01` (
   `id` int(11) NOT NULL,
+  `timeinfo` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -537,7 +533,6 @@ CREATE TABLE IF NOT EXISTS `ciselnikObecv01` (
   `obecNutsKod` varchar(12) NOT NULL,
   `obecNazev` varchar(37) NOT NULL,
   `okresNad` varchar(72) DEFAULT NULL,
-  `okresNadKod` varchar(5) NOT NULL,
   `pad2` varchar(34) DEFAULT NULL,
   `pad3` varchar(34) DEFAULT NULL,
   `pad4` varchar(34) DEFAULT NULL,
@@ -549,6 +544,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikObecv01` (
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
   `zaznamPlatnostDoDatum` datetime NOT NULL,
+  `okresNadKod` varchar(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `obecKod` (`obecKod`),
   KEY `obecNutsKod` (`obecNutsKod`),
@@ -571,13 +567,13 @@ CREATE TABLE IF NOT EXISTS `ciselnikOkresv01` (
   `okresNazev` varchar(19) NOT NULL,
   `okresNutsKod` varchar(6) NOT NULL,
   `krajNad` varchar(69) NOT NULL,
-  `krajNadKod` varchar(2) NOT NULL,
   `vuscNad` varchar(70) DEFAULT NULL,
   `globalniNavrhZmenaIdentifikator` decimal(10,0) NOT NULL,
   `nespravnostIndikator` tinyint(1) NOT NULL,
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
   `zaznamPlatnostDoDatum` datetime NOT NULL,
+  `krajNadKod` varchar(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `okresKod` (`okresKod`),
   KEY `okresNazev` (`okresNazev`),
@@ -798,26 +794,26 @@ CREATE TABLE IF NOT EXISTS `Dotace` (
   `idDotace` varchar(40) NOT NULL,
   `idPrijemce` varchar(40) NOT NULL,
   `projektKod` varchar(38) DEFAULT NULL,
-  `podpisDatum` datetime NOT NULL,
+  `podpisDatum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `subjektRozliseniKod` decimal(10,0) DEFAULT NULL,
-  `ukonceniPlanovaneDatum` datetime DEFAULT NULL,
-  `ukonceniSkutecneDatum` datetime DEFAULT NULL,
-  `zahajeniPlanovaneDatum` datetime DEFAULT NULL,
-  `zahajeniSkutecneDatum` datetime DEFAULT NULL,
+  `ukonceniPlanovaneDatum` timestamp NULL DEFAULT NULL,
+  `ukonceniSkutecneDatum` timestamp NULL DEFAULT NULL,
+  `zahajeniPlanovaneDatum` timestamp NULL DEFAULT NULL,
+  `zahajeniSkutecneDatum` timestamp NULL DEFAULT NULL,
   `zmenaSmlouvyIndikator` tinyint(1) NOT NULL,
-  `projektIdnetifikator` varchar(42) NOT NULL,
-  `projektNazev` varchar(245) DEFAULT NULL,
-  `iriOperacniProgram` varchar(117) DEFAULT NULL,
-  `iriPodprogram` varchar(111) DEFAULT NULL,
-  `iriPriorita` varchar(109) DEFAULT NULL,
-  `iriOpatreni` varchar(109) DEFAULT NULL,
-  `iriPodopatreni` varchar(112) DEFAULT NULL,
-  `iriGrantoveSchema` varchar(116) DEFAULT NULL,
-  `iriProgramPodpora` tinyint(1) DEFAULT NULL,
-  `iriTypCinnosti` tinyint(1) DEFAULT NULL,
-  `iriProgram` tinyint(1) DEFAULT NULL,
-  `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL,
+  `projektIdnetifikator` varchar(80) NOT NULL,
+  `projektNazev` varchar(255) DEFAULT NULL,
+  `iriOperacniProgram` varchar(120) DEFAULT NULL,
+  `iriPodprogram` varchar(120) DEFAULT NULL,
+  `iriPriorita` varchar(120) DEFAULT NULL,
+  `iriOpatreni` varchar(120) DEFAULT NULL,
+  `iriPodopatreni` varchar(120) DEFAULT NULL,
+  `iriGrantoveSchema` varchar(120) DEFAULT NULL,
+  `iriProgramPodpora` varchar(120) DEFAULT NULL,
+  `iriTypCinnosti` varchar(120) DEFAULT NULL,
+  `iriProgram` varchar(120) DEFAULT NULL,
+  `dPlatnost` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `dtAktualizace` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idDotace`),
   KEY `idPrijemce` (`idPrijemce`),
   KEY `iriOperacniProgram` (`iriOperacniProgram`),
@@ -929,8 +925,8 @@ DROP TABLE IF EXISTS `Rozhodnuti`;
 CREATE TABLE IF NOT EXISTS `Rozhodnuti` (
   `idRozhodnuti` varchar(40) NOT NULL,
   `idDotace` varchar(40) NOT NULL,
-  `castkaPozadovana` decimal(10,0) DEFAULT NULL,
-  `castkaRozhodnuta` decimal(10,0) NOT NULL,
+  `castkaPozadovana` bigint(20) DEFAULT NULL,
+  `castkaRozhodnuta` bigint(20) NOT NULL,
   `iriPoskytovatelDotace` varchar(110) NOT NULL,
   `iriCleneniFinancnichProstredku` varchar(110) NOT NULL,
   `iriFinancniZdroj` varchar(110) NOT NULL,
@@ -949,7 +945,8 @@ CREATE TABLE IF NOT EXISTS `Rozhodnuti` (
   KEY `investiceIndikator` (`investiceIndikator`),
   KEY `navratnostIndikator` (`navratnostIndikator`),
   KEY `castkaRozhodnuta` (`castkaRozhodnuta`),
-  KEY `castkaPozadovana` (`castkaPozadovana`)
+  KEY `castkaPozadovana` (`castkaPozadovana`),
+  KEY `refundaceIndikator` (`refundaceIndikator`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -982,10 +979,10 @@ DROP TABLE IF EXISTS `RozpoctoveObdobi`;
 CREATE TABLE IF NOT EXISTS `RozpoctoveObdobi` (
   `idObdobi` varchar(40) NOT NULL,
   `idRozhodnuti` varchar(40) NOT NULL,
-  `castkaCerpana` decimal(10,0) DEFAULT NULL,
-  `castkaUvolnena` decimal(10,0) DEFAULT NULL,
-  `castkaVracena` decimal(10,0) DEFAULT NULL,
-  `castkaSpotrebovana` decimal(10,0) DEFAULT NULL,
+  `castkaCerpana` bigint(20) DEFAULT NULL,
+  `castkaUvolnena` bigint(20) DEFAULT NULL,
+  `castkaVracena` bigint(20) DEFAULT NULL,
+  `castkaSpotrebovana` bigint(20) DEFAULT NULL,
   `rozpoctoveObdobi` decimal(10,0) NOT NULL,
   `vyporadaniKod` tinyint(1) DEFAULT NULL,
   `iriDotacniTitul` varchar(92) DEFAULT NULL,
@@ -1079,8 +1076,4 @@ ALTER TABLE `AdresaBydliste` ADD FULLTEXT KEY `obecNazev` (`obecNazev`);
 --
 ALTER TABLE `PrijemcePomoci` ADD FULLTEXT KEY `prijemce_fulltext` (`obchodniJmeno`,`jmeno`,`prijmeni`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
