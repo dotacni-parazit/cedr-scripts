@@ -1,20 +1,28 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.1
+-- version 4.7.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 07, 2017 at 02:03 PM
--- Server version: 10.1.24-MariaDB-1~jessie
--- PHP Version: 7.0.19-1~dotdeb+8.1
+-- Generation Time: Aug 06, 2017 at 10:41 AM
+-- Server version: 10.1.23-MariaDB-1~stretch
+-- PHP Version: 7.0.19-1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
 -- Database: `cedr`
 --
+CREATE DATABASE IF NOT EXISTS `cedr` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `cedr`;
 
 -- --------------------------------------------------------
 
@@ -23,7 +31,7 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `AdresaBydliste`;
-CREATE TABLE `AdresaBydliste` (
+CREATE TABLE IF NOT EXISTS `AdresaBydliste` (
   `idAdresa` varchar(40) NOT NULL,
   `idPrijemce` varchar(40) NOT NULL,
   `adrTyp` decimal(10,0) NOT NULL,
@@ -32,7 +40,11 @@ CREATE TABLE `AdresaBydliste` (
   `obecKod` decimal(10,0) DEFAULT NULL,
   `obecNazev` varchar(50) DEFAULT NULL,
   `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idAdresa`),
+  KEY `idPrijemce` (`idPrijemce`),
+  KEY `obecKod` (`obecKod`),
+  KEY `iriStat` (`iriStat`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -42,7 +54,7 @@ CREATE TABLE `AdresaBydliste` (
 --
 
 DROP TABLE IF EXISTS `AdresaSidlo`;
-CREATE TABLE `AdresaSidlo` (
+CREATE TABLE IF NOT EXISTS `AdresaSidlo` (
   `idAdresa` varchar(40) NOT NULL,
   `idPrijemce` varchar(40) NOT NULL,
   `adrTyp` tinyint(1) NOT NULL,
@@ -60,21 +72,26 @@ CREATE TABLE `AdresaSidlo` (
   `ulice` varchar(32) DEFAULT NULL,
   `adresaText` varchar(171) DEFAULT NULL,
   `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idAdresa`),
+  KEY `idPrijemce` (`idPrijemce`),
+  KEY `iriStat` (`iriStat`),
+  KEY `iriObec` (`iriObec`),
+  KEY `iriCastObce` (`iriCastObce`),
+  KEY `psc` (`psc`),
+  KEY `ulice` (`ulice`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cache`
+-- Table structure for table `ciselnikCedrCinnostTypev01`
 --
 
-DROP TABLE IF EXISTS `cache`;
-CREATE TABLE `cache` (
+DROP TABLE IF EXISTS `ciselnikCedrCinnostTypev01`;
+CREATE TABLE IF NOT EXISTS `ciselnikCedrCinnostTypev01` (
   `id` int(11) NOT NULL,
-  `identifier` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -84,13 +101,16 @@ CREATE TABLE `cache` (
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrGrantoveSchemav01`;
-CREATE TABLE `ciselnikCedrGrantoveSchemav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikCedrGrantoveSchemav01` (
   `idGrantoveSchema` varchar(116) NOT NULL,
   `grantoveSchemaKod` varchar(36) NOT NULL,
   `grantoveSchemaNazev` varchar(35) NOT NULL,
   `grantoveSchemaCislo` decimal(10,0) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idGrantoveSchema`),
+  KEY `grantoveSchemaKod` (`grantoveSchemaKod`),
+  KEY `grantoveSchemaNazev` (`grantoveSchemaNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -100,14 +120,19 @@ CREATE TABLE `ciselnikCedrGrantoveSchemav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrOpatreniv01`;
-CREATE TABLE `ciselnikCedrOpatreniv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikCedrOpatreniv01` (
   `idOpatreni` varchar(110) NOT NULL,
   `idPriorita` varchar(110) NOT NULL,
   `opatreniKod` varchar(12) NOT NULL,
   `opatreniNazev` varchar(203) NOT NULL,
   `opatreniCislo` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idOpatreni`),
+  KEY `idPriorita` (`idPriorita`),
+  KEY `opatreniKod` (`opatreniKod`),
+  KEY `opatreniCislo` (`opatreniCislo`),
+  KEY `opatreniNazev` (`opatreniNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -117,13 +142,17 @@ CREATE TABLE `ciselnikCedrOpatreniv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrOperacniProgramv01`;
-CREATE TABLE `ciselnikCedrOperacniProgramv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikCedrOperacniProgramv01` (
   `idOperacniProgram` varchar(117) NOT NULL,
   `operacaniProgramKod` varchar(18) NOT NULL,
   `operacaniProgramNazev` varchar(62) NOT NULL,
   `operacaniProgramCislo` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idOperacniProgram`),
+  KEY `operacaniProgramNazev` (`operacaniProgramNazev`),
+  KEY `operacaniProgramKod` (`operacaniProgramKod`),
+  KEY `operacaniProgramCislo` (`operacaniProgramCislo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -133,14 +162,30 @@ CREATE TABLE `ciselnikCedrOperacniProgramv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrPodOpatreniv01`;
-CREATE TABLE `ciselnikCedrPodOpatreniv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikCedrPodOpatreniv01` (
   `idPodOpatreni` varchar(113) NOT NULL,
   `idOpatreni` varchar(110) NOT NULL,
   `podOpatreniKod` varchar(14) NOT NULL,
   `podOpatreniNazev` varchar(120) NOT NULL,
   `podOpatreniCislo` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idPodOpatreni`),
+  KEY `idOpatreni` (`idOpatreni`),
+  KEY `podOpatreniKod` (`podOpatreniKod`),
+  KEY `podOpatreniCislo` (`podOpatreniCislo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ciselnikCedrPodprogramv01`
+--
+
+DROP TABLE IF EXISTS `ciselnikCedrPodprogramv01`;
+CREATE TABLE IF NOT EXISTS `ciselnikCedrPodprogramv01` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -150,7 +195,7 @@ CREATE TABLE `ciselnikCedrPodOpatreniv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrPrioritav01`;
-CREATE TABLE `ciselnikCedrPrioritav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikCedrPrioritav01` (
   `idPriorita` varchar(110) NOT NULL,
   `idOperacniProgram` varchar(117) NOT NULL,
   `idPodprogram` tinyint(1) DEFAULT NULL,
@@ -158,7 +203,25 @@ CREATE TABLE `ciselnikCedrPrioritav01` (
   `prioritaNazev` varchar(159) NOT NULL,
   `prioritaCislo` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idPriorita`),
+  KEY `idOperacniProgram` (`idOperacniProgram`),
+  KEY `idPodprogram` (`idPodprogram`),
+  KEY `prioritaKod` (`prioritaKod`),
+  KEY `prioritaCislo` (`prioritaCislo`),
+  KEY `prioritaNazev` (`prioritaNazev`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ciselnikCedrProgramPodporav01`
+--
+
+DROP TABLE IF EXISTS `ciselnikCedrProgramPodporav01`;
+CREATE TABLE IF NOT EXISTS `ciselnikCedrProgramPodporav01` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -168,13 +231,17 @@ CREATE TABLE `ciselnikCedrPrioritav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikDotacePoskytovatelv01`;
-CREATE TABLE `ciselnikDotacePoskytovatelv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikDotacePoskytovatelv01` (
   `id` varchar(92) NOT NULL,
   `dotacePoskytovatelKod` decimal(10,0) NOT NULL,
   `dotacePoskytovatelNazev` varchar(70) NOT NULL,
   `dotacePoskytovatelNadrizenyKod` tinyint(1) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dotacePoskytovatelKod_2` (`dotacePoskytovatelKod`),
+  KEY `dotacePoskytovatelKod` (`dotacePoskytovatelKod`),
+  KEY `dotacePoskytovatelNazev` (`dotacePoskytovatelNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -184,7 +251,7 @@ CREATE TABLE `ciselnikDotacePoskytovatelv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikDotaceTitulv01`;
-CREATE TABLE `ciselnikDotaceTitulv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitulv01` (
   `idDotaceTitul` varchar(92) NOT NULL,
   `dotaceTitulKod` decimal(10,0) NOT NULL,
   `dotaceTitulVlastniKod` varchar(30) NOT NULL,
@@ -192,7 +259,12 @@ CREATE TABLE `ciselnikDotaceTitulv01` (
   `dotaceTitulNazev` varchar(160) NOT NULL,
   `dotaceTitulNazevZkraceny` varchar(50) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idDotaceTitul`),
+  KEY `dotaceTitulKod` (`dotaceTitulKod`),
+  KEY `dotaceTitulVlastniKod` (`dotaceTitulVlastniKod`),
+  KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
+  KEY `dotaceTitulNazev` (`dotaceTitulNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -202,10 +274,11 @@ CREATE TABLE `ciselnikDotaceTitulv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01`;
-CREATE TABLE `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01` (
   `idDotaceTitul` varchar(92) NOT NULL,
   `idRozpoctovaSkladbaParagraf` varchar(102) NOT NULL,
-  `zaznamDatumPlatnost` datetime NOT NULL
+  `zaznamDatumPlatnost` datetime NOT NULL,
+  UNIQUE KEY `idDotaceTitul` (`idDotaceTitul`,`idRozpoctovaSkladbaParagraf`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -215,10 +288,11 @@ CREATE TABLE `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikDotaceTitul_StatniRozpocetUkazatelv01`;
-CREATE TABLE `ciselnikDotaceTitul_StatniRozpocetUkazatelv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitul_StatniRozpocetUkazatelv01` (
   `idDotaceTitul` varchar(92) NOT NULL,
   `idStatniRozpocetUkazatel` varchar(109) NOT NULL,
-  `zaznamDatumPlatnost` datetime NOT NULL
+  `zaznamDatumPlatnost` datetime NOT NULL,
+  UNIQUE KEY `idDotaceTitul` (`idDotaceTitul`,`idStatniRozpocetUkazatel`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -228,12 +302,15 @@ CREATE TABLE `ciselnikDotaceTitul_StatniRozpocetUkazatelv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikFinancniProstredekCleneniv01`;
-CREATE TABLE `ciselnikFinancniProstredekCleneniv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikFinancniProstredekCleneniv01` (
   `id` varchar(98) NOT NULL,
   `financniProstredekCleneniKod` decimal(10,0) NOT NULL,
   `financniProstredekCleneniNazev` varchar(164) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` date NOT NULL
+  `zaznamPlatnostDoDatum` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `financniProstredekCleneniKod` (`financniProstredekCleneniKod`),
+  KEY `financniProstredekCleneniNazev` (`financniProstredekCleneniNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -243,23 +320,28 @@ CREATE TABLE `ciselnikFinancniProstredekCleneniv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikFinancniZdrojv01`;
-CREATE TABLE `ciselnikFinancniZdrojv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikFinancniZdrojv01` (
   `id` varchar(90) NOT NULL,
   `financniZdrojKod` varchar(6) NOT NULL,
   `financniZdrojNadrizenyKod` varchar(3) DEFAULT NULL,
   `financniZdrojNazev` varchar(50) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `financniZdrojKod_2` (`financniZdrojKod`),
+  KEY `financniZdrojKod` (`financniZdrojKod`),
+  KEY `financniZdrojNadrizenyKod` (`financniZdrojNadrizenyKod`),
+  KEY `financniZdrojNazev` (`financniZdrojNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikKrajv010`
+-- Table structure for table `ciselnikKrajv01`
 --
 
-DROP TABLE IF EXISTS `ciselnikKrajv010`;
-CREATE TABLE `ciselnikKrajv010` (
+DROP TABLE IF EXISTS `ciselnikKrajv01`;
+CREATE TABLE IF NOT EXISTS `ciselnikKrajv01` (
   `id` varchar(78) NOT NULL,
   `krajKod` decimal(10,0) NOT NULL,
   `krajNazev` varchar(14) NOT NULL,
@@ -267,7 +349,11 @@ CREATE TABLE `ciselnikKrajv010` (
   `nespravnostIndikator` tinyint(1) NOT NULL,
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `krajKod` (`krajKod`),
+  KEY `krajNazev` (`krajNazev`),
+  KEY `transakceIdentifikator` (`transakceIdentifikator`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -277,7 +363,7 @@ CREATE TABLE `ciselnikKrajv010` (
 --
 
 DROP TABLE IF EXISTS `ciselnikMestskyObvodMestskaCastv01`;
-CREATE TABLE `ciselnikMestskyObvodMestskaCastv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikMestskyObvodMestskaCastv01` (
   `id` varchar(101) NOT NULL,
   `mestskyObvodMestskaCastKod` decimal(10,0) NOT NULL,
   `mestskyObvodMestskaCastNazev` varchar(32) NOT NULL,
@@ -292,7 +378,23 @@ CREATE TABLE `ciselnikMestskyObvodMestskaCastv01` (
   `nespravnostIndikator` tinyint(1) NOT NULL,
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mestskyObvodMestskaCastKod` (`mestskyObvodMestskaCastKod`),
+  KEY `transakceIdentifikator` (`transakceIdentifikator`),
+  KEY `mestskyObvodMestskaCastNazev` (`mestskyObvodMestskaCastNazev`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ciselnikMmrCinnostTypev01`
+--
+
+DROP TABLE IF EXISTS `ciselnikMmrCinnostTypev01`;
+CREATE TABLE IF NOT EXISTS `ciselnikMmrCinnostTypev01` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -302,13 +404,17 @@ CREATE TABLE `ciselnikMestskyObvodMestskaCastv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrGrantoveSchemav01`;
-CREATE TABLE `ciselnikMmrGrantoveSchemav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikMmrGrantoveSchemav01` (
   `idGrantoveSchema` varchar(115) NOT NULL,
   `grantoveSchemaKod` varchar(14) NOT NULL,
   `grantoveSchemaNazev` varchar(100) NOT NULL,
   `grantoveSchemaCislo` tinyint(1) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` date NOT NULL
+  `zaznamPlatnostDoDatum` date NOT NULL,
+  PRIMARY KEY (`idGrantoveSchema`),
+  KEY `grantoveSchemaKod` (`grantoveSchemaKod`),
+  KEY `grantoveSchemaNazev` (`grantoveSchemaNazev`),
+  KEY `grantoveSchemaCislo` (`grantoveSchemaCislo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -318,14 +424,18 @@ CREATE TABLE `ciselnikMmrGrantoveSchemav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrOpatreniv01`;
-CREATE TABLE `ciselnikMmrOpatreniv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikMmrOpatreniv01` (
   `idOpatreni` varchar(109) NOT NULL,
   `idPriorita` varchar(109) NOT NULL,
   `opatreniKod` varchar(8) NOT NULL,
   `opatreniNazev` varchar(255) NOT NULL,
   `opatreniCislo` tinyint(1) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idOpatreni`),
+  KEY `idPriorita` (`idPriorita`),
+  KEY `opatreniKod` (`opatreniKod`),
+  KEY `opatreniNazev` (`opatreniNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -335,13 +445,16 @@ CREATE TABLE `ciselnikMmrOpatreniv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrOperacniProgramv01`;
-CREATE TABLE `ciselnikMmrOperacniProgramv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikMmrOperacniProgramv01` (
   `idOperacniProgram` varchar(116) NOT NULL,
   `operacaniProgramKod` varchar(15) NOT NULL,
   `operacaniProgramNazev` varchar(91) NOT NULL,
   `operacaniProgramCislo` date DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idOperacniProgram`),
+  KEY `operacaniProgramKod` (`operacaniProgramKod`),
+  KEY `operacaniProgramNazev` (`operacaniProgramNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -351,14 +464,29 @@ CREATE TABLE `ciselnikMmrOperacniProgramv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrPodOpatreniv01`;
-CREATE TABLE `ciselnikMmrPodOpatreniv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikMmrPodOpatreniv01` (
   `idPodOpatreni` varchar(112) NOT NULL,
   `idOpatreni` varchar(109) NOT NULL,
   `podOpatreniKod` varchar(30) NOT NULL,
   `podOpatreniNazev` varchar(99) NOT NULL,
   `podOpatreniCislo` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idPodOpatreni`),
+  KEY `idOpatreni` (`idOpatreni`),
+  KEY `podOpatreniNazev` (`podOpatreniNazev`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ciselnikMmrPopdprogramv01`
+--
+
+DROP TABLE IF EXISTS `ciselnikMmrPopdprogramv01`;
+CREATE TABLE IF NOT EXISTS `ciselnikMmrPopdprogramv01` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -368,7 +496,7 @@ CREATE TABLE `ciselnikMmrPodOpatreniv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrPrioritav01`;
-CREATE TABLE `ciselnikMmrPrioritav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikMmrPrioritav01` (
   `idPriorita` varchar(109) NOT NULL,
   `idOperacniProgram` varchar(116) DEFAULT NULL,
   `idPodprogram` varchar(111) DEFAULT NULL,
@@ -376,7 +504,24 @@ CREATE TABLE `ciselnikMmrPrioritav01` (
   `prioritaNazev` varchar(176) NOT NULL,
   `prioritaCislo` tinyint(1) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idPriorita`),
+  KEY `idOperacniProgram` (`idOperacniProgram`),
+  KEY `idPodprogram` (`idPodprogram`),
+  KEY `prioritaKod` (`prioritaKod`),
+  KEY `prioritaNazev` (`prioritaNazev`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ciselnikMmrProgramPodporav01`
+--
+
+DROP TABLE IF EXISTS `ciselnikMmrProgramPodporav01`;
+CREATE TABLE IF NOT EXISTS `ciselnikMmrProgramPodporav01` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -386,12 +531,13 @@ CREATE TABLE `ciselnikMmrPrioritav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikObecv01`;
-CREATE TABLE `ciselnikObecv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikObecv01` (
   `id` varchar(82) NOT NULL,
   `obecKod` decimal(10,0) NOT NULL,
   `obecNutsKod` varchar(12) NOT NULL,
   `obecNazev` varchar(37) NOT NULL,
   `okresNad` varchar(72) DEFAULT NULL,
+  `okresNadKod` varchar(5) NOT NULL,
   `pad2` varchar(34) DEFAULT NULL,
   `pad3` varchar(34) DEFAULT NULL,
   `pad4` varchar(34) DEFAULT NULL,
@@ -402,7 +548,14 @@ CREATE TABLE `ciselnikObecv01` (
   `nespravnostIndikator` tinyint(1) NOT NULL,
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `obecKod` (`obecKod`),
+  KEY `obecNutsKod` (`obecNutsKod`),
+  KEY `obecNazev` (`obecNazev`),
+  KEY `transakceIdentifikator` (`transakceIdentifikator`),
+  KEY `okresNad` (`okresNad`),
+  KEY `okresNadKod` (`okresNadKod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -412,18 +565,27 @@ CREATE TABLE `ciselnikObecv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikOkresv01`;
-CREATE TABLE `ciselnikOkresv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikOkresv01` (
   `id` varchar(81) NOT NULL,
   `okresKod` decimal(10,0) NOT NULL,
   `okresNazev` varchar(19) NOT NULL,
   `okresNutsKod` varchar(6) NOT NULL,
   `krajNad` varchar(69) NOT NULL,
+  `krajNadKod` varchar(2) NOT NULL,
   `vuscNad` varchar(70) DEFAULT NULL,
   `globalniNavrhZmenaIdentifikator` decimal(10,0) NOT NULL,
   `nespravnostIndikator` tinyint(1) NOT NULL,
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `okresKod` (`okresKod`),
+  KEY `okresNazev` (`okresNazev`),
+  KEY `okresNutsKod` (`okresNutsKod`),
+  KEY `vuscNad` (`vuscNad`),
+  KEY `transakceIdentifikator` (`transakceIdentifikator`),
+  KEY `krajNad` (`krajNad`),
+  KEY `krajNadKod` (`krajNadKod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -433,14 +595,18 @@ CREATE TABLE `ciselnikOkresv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikPravniFormav01`;
-CREATE TABLE `ciselnikPravniFormav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikPravniFormav01` (
   `id` varchar(85) NOT NULL,
   `pravniFormaKod` decimal(10,0) NOT NULL,
   `pravniFormaNazev` varchar(117) NOT NULL,
   `pravniFormaNazevZkraceny` varchar(3) NOT NULL,
   `pravniFormaTypKod` decimal(10,0) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pravniFormaKod` (`pravniFormaKod`),
+  KEY `pravniFormaNazev` (`pravniFormaNazev`),
+  KEY `pravniFormaTypKod` (`pravniFormaTypKod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -450,12 +616,15 @@ CREATE TABLE `ciselnikPravniFormav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikProgramv01`;
-CREATE TABLE `ciselnikProgramv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikProgramv01` (
   `id` varchar(112) NOT NULL,
   `programKod` varchar(10) NOT NULL,
   `programNazev` varchar(100) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `programKod` (`programKod`),
+  KEY `programNazev` (`programNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -465,12 +634,15 @@ CREATE TABLE `ciselnikProgramv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikRozpoctovaSkladbaParagrafv01`;
-CREATE TABLE `ciselnikRozpoctovaSkladbaParagrafv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikRozpoctovaSkladbaParagrafv01` (
   `id` varchar(102) NOT NULL,
   `rozpoctovaSkladbaParagrafKod` decimal(10,0) NOT NULL,
   `rozpoctovaSkladbaParagrafNazev` varchar(150) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rozpoctovaSkladbaParagrafKod` (`rozpoctovaSkladbaParagrafKod`),
+  KEY `rozpoctovaSkladbaParagrafNazev` (`rozpoctovaSkladbaParagrafNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -480,12 +652,15 @@ CREATE TABLE `ciselnikRozpoctovaSkladbaParagrafv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikRozpoctovaSkladbaPolozkav01`;
-CREATE TABLE `ciselnikRozpoctovaSkladbaPolozkav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikRozpoctovaSkladbaPolozkav01` (
   `id` varchar(99) NOT NULL,
   `rozpoctovaSkladbaPolozkaKod` decimal(10,0) NOT NULL,
   `rozpoctovaSkladbaPolozkaNazev` varchar(131) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rozpoctovaSkladbaPolozkaKod` (`rozpoctovaSkladbaPolozkaKod`),
+  KEY `rozpoctovaSkladbaPolozkaNazev` (`rozpoctovaSkladbaPolozkaNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -495,12 +670,15 @@ CREATE TABLE `ciselnikRozpoctovaSkladbaPolozkav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikStatniRozpocetKapitolav01`;
-CREATE TABLE `ciselnikStatniRozpocetKapitolav01` (
+CREATE TABLE IF NOT EXISTS `ciselnikStatniRozpocetKapitolav01` (
   `id` varchar(96) NOT NULL,
   `statniRozpocetKapitolaKod` decimal(10,0) NOT NULL,
   `statniRozpocetKapitolaNazev` varchar(70) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
+  KEY `statniRozpocetKapitolaNazev` (`statniRozpocetKapitolaNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -510,7 +688,7 @@ CREATE TABLE `ciselnikStatniRozpocetKapitolav01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikStatniRozpocetUkazatelv01`;
-CREATE TABLE `ciselnikStatniRozpocetUkazatelv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikStatniRozpocetUkazatelv01` (
   `id` varchar(109) NOT NULL,
   `idStatniRozpocetKapitola` tinyint(1) DEFAULT NULL,
   `statniRozpocetUkazatelKod` varchar(12) NOT NULL,
@@ -518,7 +696,12 @@ CREATE TABLE `ciselnikStatniRozpocetUkazatelv01` (
   `statniRozpocetUkazatelNadrizenyKod` varchar(12) DEFAULT NULL,
   `statniRozpocetUkazatelNazev` varchar(108) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `statniRozpocetUkazatelKod` (`statniRozpocetUkazatelKod`),
+  KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
+  KEY `statniRozpocetUkazatelNadrizenyKod` (`statniRozpocetUkazatelNadrizenyKod`),
+  KEY `statniRozpocetUkazatelNazev` (`statniRozpocetUkazatelNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -528,7 +711,7 @@ CREATE TABLE `ciselnikStatniRozpocetUkazatelv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikStatv01`;
-CREATE TABLE `ciselnikStatv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikStatv01` (
   `id` varchar(77) NOT NULL,
   `statKod3Znaky` varchar(3) NOT NULL,
   `statKod3Cisla` decimal(10,0) NOT NULL,
@@ -538,7 +721,12 @@ CREATE TABLE `ciselnikStatv01` (
   `statNazevEn` varchar(50) DEFAULT NULL,
   `statNazevZkracenyEn` varchar(44) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `statKod3Znaky` (`statKod3Znaky`),
+  KEY `statKod3Cisla` (`statKod3Cisla`),
+  KEY `statNazev` (`statNazev`),
+  KEY `statNazevEn` (`statNazevEn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -548,13 +736,17 @@ CREATE TABLE `ciselnikStatv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikUcelZnakv01`;
-CREATE TABLE `ciselnikUcelZnakv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikUcelZnakv01` (
   `idUcelZnak` varchar(84) NOT NULL,
   `ucelZnakKod` decimal(10,0) NOT NULL,
   `statniRozpocetKapitolaKod` decimal(10,0) DEFAULT NULL,
   `ucelZnakNazev` varchar(250) NOT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`idUcelZnak`),
+  KEY `ucelZnakKod` (`ucelZnakKod`),
+  KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
+  KEY `ucelZnakNazev` (`ucelZnakNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -564,10 +756,11 @@ CREATE TABLE `ciselnikUcelZnakv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikUcelZnak_DotacniTitulv01`;
-CREATE TABLE `ciselnikUcelZnak_DotacniTitulv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikUcelZnak_DotacniTitulv01` (
   `idUcelZnak` varchar(84) NOT NULL,
   `idDotaceTitul` varchar(92) NOT NULL,
-  `zaznamDatumPlatnost` datetime NOT NULL
+  `zaznamDatumPlatnost` datetime NOT NULL,
+  UNIQUE KEY `idDotaceTitul` (`idUcelZnak`,`idDotaceTitul`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -577,7 +770,7 @@ CREATE TABLE `ciselnikUcelZnak_DotacniTitulv01` (
 --
 
 DROP TABLE IF EXISTS `ciselnikVuscv01`;
-CREATE TABLE `ciselnikVuscv01` (
+CREATE TABLE IF NOT EXISTS `ciselnikVuscv01` (
   `id` varchar(79) NOT NULL,
   `vuscKod` decimal(10,0) NOT NULL,
   `krajNutsKod` varchar(5) NOT NULL,
@@ -586,7 +779,12 @@ CREATE TABLE `ciselnikVuscv01` (
   `nespravnostIndikator` tinyint(1) NOT NULL,
   `transakceIdentifikator` decimal(10,0) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
-  `zaznamPlatnostDoDatum` datetime NOT NULL
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vuscKod` (`vuscKod`),
+  KEY `krajNutsKod` (`krajNutsKod`),
+  KEY `vuscNazev` (`vuscNazev`),
+  KEY `transakceIdentifikator` (`transakceIdentifikator`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -596,7 +794,7 @@ CREATE TABLE `ciselnikVuscv01` (
 --
 
 DROP TABLE IF EXISTS `Dotace`;
-CREATE TABLE `Dotace` (
+CREATE TABLE IF NOT EXISTS `Dotace` (
   `idDotace` varchar(40) NOT NULL,
   `idPrijemce` varchar(40) NOT NULL,
   `projektKod` varchar(38) DEFAULT NULL,
@@ -619,7 +817,19 @@ CREATE TABLE `Dotace` (
   `iriTypCinnosti` tinyint(1) DEFAULT NULL,
   `iriProgram` tinyint(1) DEFAULT NULL,
   `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idDotace`),
+  KEY `idPrijemce` (`idPrijemce`),
+  KEY `iriOperacniProgram` (`iriOperacniProgram`),
+  KEY `iriPodprogram` (`iriPodprogram`),
+  KEY `iriOpatreni` (`iriOpatreni`),
+  KEY `iriPriorita` (`iriPriorita`),
+  KEY `iriGrantoveSchema` (`iriGrantoveSchema`),
+  KEY `iriPodopatreni` (`iriPodopatreni`),
+  KEY `iriTypCinnosti` (`iriTypCinnosti`),
+  KEY `iriProgram` (`iriProgram`),
+  KEY `projektNazev` (`projektNazev`),
+  KEY `projektKod` (`projektKod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -629,9 +839,11 @@ CREATE TABLE `Dotace` (
 --
 
 DROP TABLE IF EXISTS `EkonomikaSubjekt`;
-CREATE TABLE `EkonomikaSubjekt` (
+CREATE TABLE IF NOT EXISTS `EkonomikaSubjekt` (
   `id` varchar(73) NOT NULL,
-  `ico` decimal(10,0) NOT NULL
+  `ico` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ico` (`ico`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -641,7 +853,7 @@ CREATE TABLE `EkonomikaSubjekt` (
 --
 
 DROP TABLE IF EXISTS `Etapa`;
-CREATE TABLE `Etapa` (
+CREATE TABLE IF NOT EXISTS `Etapa` (
   `idEtapa` varchar(40) NOT NULL,
   `idDotace` varchar(40) NOT NULL,
   `etapaCislo` decimal(10,0) NOT NULL,
@@ -651,7 +863,11 @@ CREATE TABLE `Etapa` (
   `zahajeniPlanovaneDatum` datetime NOT NULL,
   `zahajeniSkutecneDatum` datetime NOT NULL,
   `poznamka` varchar(1987) DEFAULT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idEtapa`),
+  KEY `idDotace` (`idDotace`),
+  KEY `etapaCislo` (`etapaCislo`),
+  KEY `etapaNazev` (`etapaNazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -661,12 +877,16 @@ CREATE TABLE `Etapa` (
 --
 
 DROP TABLE IF EXISTS `Osoba`;
-CREATE TABLE `Osoba` (
+CREATE TABLE IF NOT EXISTS `Osoba` (
   `id` varchar(133) NOT NULL,
   `jmeno` varchar(22) NOT NULL,
   `prijmeni` varchar(35) NOT NULL,
   `narozeniRok` decimal(10,0) NOT NULL,
-  `bydlisteObecKod` decimal(10,0) NOT NULL
+  `bydlisteObecKod` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jmeno` (`jmeno`),
+  KEY `prijmeni` (`prijmeni`),
+  KEY `narozeniRok` (`narozeniRok`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -676,7 +896,7 @@ CREATE TABLE `Osoba` (
 --
 
 DROP TABLE IF EXISTS `PrijemcePomoci`;
-CREATE TABLE `PrijemcePomoci` (
+CREATE TABLE IF NOT EXISTS `PrijemcePomoci` (
   `idPrijemce` varchar(40) NOT NULL,
   `ico` decimal(10,0) DEFAULT NULL,
   `obchodniJmeno` varchar(144) DEFAULT NULL,
@@ -688,7 +908,15 @@ CREATE TABLE `PrijemcePomoci` (
   `iriOsoba` varchar(112) DEFAULT NULL,
   `iriEkonomikaSubjekt` varchar(73) DEFAULT NULL,
   `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idPrijemce`),
+  KEY `ico` (`ico`),
+  KEY `obchodniJmeno` (`obchodniJmeno`),
+  KEY `iriPravniForma` (`iriPravniForma`),
+  KEY `iriStat` (`iriStat`),
+  KEY `iriOsoba` (`iriOsoba`),
+  KEY `iriEkonomikaSubjekt` (`iriEkonomikaSubjekt`),
+  KEY `rokNarozeni` (`rokNarozeni`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -698,7 +926,7 @@ CREATE TABLE `PrijemcePomoci` (
 --
 
 DROP TABLE IF EXISTS `Rozhodnuti`;
-CREATE TABLE `Rozhodnuti` (
+CREATE TABLE IF NOT EXISTS `Rozhodnuti` (
   `idRozhodnuti` varchar(40) NOT NULL,
   `idDotace` varchar(40) NOT NULL,
   `castkaPozadovana` decimal(10,0) DEFAULT NULL,
@@ -706,11 +934,22 @@ CREATE TABLE `Rozhodnuti` (
   `iriPoskytovatelDotace` varchar(110) NOT NULL,
   `iriCleneniFinancnichProstredku` varchar(110) NOT NULL,
   `iriFinancniZdroj` varchar(110) NOT NULL,
-  `rokRozhodnuti` decimal(10,0) NOT NULL,
+  `rokRozhodnuti` int(11) NOT NULL,
   `investiceIndikator` tinyint(1) NOT NULL,
   `navratnostIndikator` tinyint(1) NOT NULL,
+  `refundaceIndikator` tinyint(1) NOT NULL,
   `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idRozhodnuti`),
+  KEY `idDotace` (`idDotace`),
+  KEY `iriPoskytovatelDotace` (`iriPoskytovatelDotace`),
+  KEY `iriCleneniFinancnichProstredku` (`iriCleneniFinancnichProstredku`),
+  KEY `iriFinancniZdroj` (`iriFinancniZdroj`),
+  KEY `rokRozhodnuti` (`rokRozhodnuti`),
+  KEY `investiceIndikator` (`investiceIndikator`),
+  KEY `navratnostIndikator` (`navratnostIndikator`),
+  KEY `castkaRozhodnuta` (`castkaRozhodnuta`),
+  KEY `castkaPozadovana` (`castkaPozadovana`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -720,13 +959,17 @@ CREATE TABLE `Rozhodnuti` (
 --
 
 DROP TABLE IF EXISTS `RozhodnutiSmlouva`;
-CREATE TABLE `RozhodnutiSmlouva` (
+CREATE TABLE IF NOT EXISTS `RozhodnutiSmlouva` (
   `idSmlouva` varchar(40) NOT NULL,
   `idRozhodnuti` varchar(40) NOT NULL,
   `cisloJednaciRozhodnuti` varchar(29) NOT NULL,
   `dokumentDruhKod` tinyint(1) NOT NULL,
   `rozhodnutiDatum` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idSmlouva`),
+  KEY `idRozhodnuti` (`idRozhodnuti`),
+  KEY `cisloJednaciRozhodnuti` (`cisloJednaciRozhodnuti`),
+  KEY `rozhodnutiDatum` (`rozhodnutiDatum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -736,7 +979,7 @@ CREATE TABLE `RozhodnutiSmlouva` (
 --
 
 DROP TABLE IF EXISTS `RozpoctoveObdobi`;
-CREATE TABLE `RozpoctoveObdobi` (
+CREATE TABLE IF NOT EXISTS `RozpoctoveObdobi` (
   `idObdobi` varchar(40) NOT NULL,
   `idRozhodnuti` varchar(40) NOT NULL,
   `castkaCerpana` decimal(10,0) DEFAULT NULL,
@@ -748,7 +991,16 @@ CREATE TABLE `RozpoctoveObdobi` (
   `iriDotacniTitul` varchar(92) DEFAULT NULL,
   `iriUcelovyZnak` varchar(84) DEFAULT NULL,
   `dPlatnost` datetime NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idObdobi`),
+  KEY `idRozhodnuti` (`idRozhodnuti`),
+  KEY `castkaCerpana` (`castkaCerpana`),
+  KEY `castkaUvolnena` (`castkaUvolnena`),
+  KEY `castkaVracena` (`castkaVracena`),
+  KEY `castkaSpotrebovana` (`castkaSpotrebovana`),
+  KEY `rozpoctoveObdobi` (`rozpoctoveObdobi`),
+  KEY `iriDotacniTitul` (`iriDotacniTitul`),
+  KEY `iriUcelovyZnak` (`iriUcelovyZnak`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -758,13 +1010,17 @@ CREATE TABLE `RozpoctoveObdobi` (
 --
 
 DROP TABLE IF EXISTS `SplatkaKalendar`;
-CREATE TABLE `SplatkaKalendar` (
+CREATE TABLE IF NOT EXISTS `SplatkaKalendar` (
   `idSKalendar` varchar(40) NOT NULL,
   `idRozhodnuti` varchar(40) NOT NULL,
   `castkaSplatkaPlanovana` decimal(10,0) NOT NULL,
   `castkaSplatkaSkutecna` decimal(10,0) NOT NULL,
   `uroceniIndikator` tinyint(1) NOT NULL,
-  `dtAktualizace` datetime NOT NULL
+  `dtAktualizace` datetime NOT NULL,
+  PRIMARY KEY (`idSKalendar`),
+  KEY `idRozhodnuti` (`idRozhodnuti`),
+  KEY `castkaSplatkaPlanovana` (`castkaSplatkaPlanovana`),
+  KEY `castkaSplatkaSkutecna` (`castkaSplatkaSkutecna`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -774,7 +1030,7 @@ CREATE TABLE `SplatkaKalendar` (
 --
 
 DROP TABLE IF EXISTS `UzemniRealizace`;
-CREATE TABLE `UzemniRealizace` (
+CREATE TABLE IF NOT EXISTS `UzemniRealizace` (
   `idUzemi` varchar(40) NOT NULL,
   `idDotace` varchar(40) NOT NULL,
   `mezinarodniPusobnostIndikator` tinyint(1) DEFAULT NULL,
@@ -793,7 +1049,20 @@ CREATE TABLE `UzemniRealizace` (
   `adresniMistoKod` tinyint(1) DEFAULT NULL,
   `okresNutsKod` varchar(6) NOT NULL,
   `dtAktualizace` datetime NOT NULL,
-  `dPlatnost` datetime NOT NULL
+  `dPlatnost` datetime NOT NULL,
+  PRIMARY KEY (`idUzemi`),
+  KEY `idDotace` (`idDotace`),
+  KEY `iriRealizovanNaUzemiStatu` (`iriRealizovanNaUzemiStatu`),
+  KEY `iriCastObce` (`iriCastObce`),
+  KEY `iriKraj` (`iriKraj`),
+  KEY `iriMestskyObvodMestskaCast` (`iriMestskyObvodMestskaCast`),
+  KEY `iriObec` (`iriObec`),
+  KEY `iriOkres` (`iriOkres`),
+  KEY `iriVusc` (`iriVusc`),
+  KEY `okresNutsKod` (`okresNutsKod`),
+  KEY `adresniMistoKod` (`adresniMistoKod`),
+  KEY `stavebniObjektKod` (`stavebniObjektKod`),
+  KEY `uliceKod` (`uliceKod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -803,421 +1072,15 @@ CREATE TABLE `UzemniRealizace` (
 --
 -- Indexes for table `AdresaBydliste`
 --
-ALTER TABLE `AdresaBydliste`
-  ADD PRIMARY KEY (`idAdresa`),
-  ADD KEY `idPrijemce` (`idPrijemce`),
-  ADD KEY `obecKod` (`obecKod`),
-  ADD KEY `iriStat` (`iriStat`);
 ALTER TABLE `AdresaBydliste` ADD FULLTEXT KEY `obecNazev` (`obecNazev`);
-
---
--- Indexes for table `AdresaSidlo`
---
-ALTER TABLE `AdresaSidlo`
-  ADD PRIMARY KEY (`idAdresa`),
-  ADD KEY `idPrijemce` (`idPrijemce`),
-  ADD KEY `iriStat` (`iriStat`),
-  ADD KEY `iriObec` (`iriObec`),
-  ADD KEY `iriCastObce` (`iriCastObce`),
-  ADD KEY `psc` (`psc`),
-  ADD KEY `ulice` (`ulice`);
-
---
--- Indexes for table `cache`
---
-ALTER TABLE `cache`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `ciselnikCedrGrantoveSchemav01`
---
-ALTER TABLE `ciselnikCedrGrantoveSchemav01`
-  ADD PRIMARY KEY (`idGrantoveSchema`),
-  ADD KEY `grantoveSchemaKod` (`grantoveSchemaKod`),
-  ADD KEY `grantoveSchemaNazev` (`grantoveSchemaNazev`);
-
---
--- Indexes for table `ciselnikCedrOpatreniv01`
---
-ALTER TABLE `ciselnikCedrOpatreniv01`
-  ADD PRIMARY KEY (`idOpatreni`),
-  ADD KEY `idPriorita` (`idPriorita`),
-  ADD KEY `opatreniKod` (`opatreniKod`),
-  ADD KEY `opatreniCislo` (`opatreniCislo`),
-  ADD KEY `opatreniNazev` (`opatreniNazev`);
-
---
--- Indexes for table `ciselnikCedrOperacniProgramv01`
---
-ALTER TABLE `ciselnikCedrOperacniProgramv01`
-  ADD PRIMARY KEY (`idOperacniProgram`),
-  ADD KEY `operacaniProgramNazev` (`operacaniProgramNazev`),
-  ADD KEY `operacaniProgramKod` (`operacaniProgramKod`),
-  ADD KEY `operacaniProgramCislo` (`operacaniProgramCislo`);
-
---
--- Indexes for table `ciselnikCedrPodOpatreniv01`
---
-ALTER TABLE `ciselnikCedrPodOpatreniv01`
-  ADD PRIMARY KEY (`idPodOpatreni`),
-  ADD KEY `idOpatreni` (`idOpatreni`),
-  ADD KEY `podOpatreniKod` (`podOpatreniKod`),
-  ADD KEY `podOpatreniCislo` (`podOpatreniCislo`);
-
---
--- Indexes for table `ciselnikCedrPrioritav01`
---
-ALTER TABLE `ciselnikCedrPrioritav01`
-  ADD PRIMARY KEY (`idPriorita`),
-  ADD KEY `idOperacniProgram` (`idOperacniProgram`),
-  ADD KEY `idPodprogram` (`idPodprogram`),
-  ADD KEY `prioritaKod` (`prioritaKod`),
-  ADD KEY `prioritaCislo` (`prioritaCislo`),
-  ADD KEY `prioritaNazev` (`prioritaNazev`);
-
---
--- Indexes for table `ciselnikDotacePoskytovatelv01`
---
-ALTER TABLE `ciselnikDotacePoskytovatelv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `dotacePoskytovatelKod` (`dotacePoskytovatelKod`),
-  ADD KEY `dotacePoskytovatelNazev` (`dotacePoskytovatelNazev`);
-
---
--- Indexes for table `ciselnikDotaceTitulv01`
---
-ALTER TABLE `ciselnikDotaceTitulv01`
-  ADD PRIMARY KEY (`idDotaceTitul`),
-  ADD KEY `dotaceTitulKod` (`dotaceTitulKod`),
-  ADD KEY `dotaceTitulVlastniKod` (`dotaceTitulVlastniKod`),
-  ADD KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
-  ADD KEY `dotaceTitulNazev` (`dotaceTitulNazev`);
-
---
--- Indexes for table `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01`
---
-ALTER TABLE `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01`
-  ADD UNIQUE KEY `idDotaceTitul` (`idDotaceTitul`,`idRozpoctovaSkladbaParagraf`);
-
---
--- Indexes for table `ciselnikDotaceTitul_StatniRozpocetUkazatelv01`
---
-ALTER TABLE `ciselnikDotaceTitul_StatniRozpocetUkazatelv01`
-  ADD UNIQUE KEY `idDotaceTitul` (`idDotaceTitul`,`idStatniRozpocetUkazatel`);
-
---
--- Indexes for table `ciselnikFinancniProstredekCleneniv01`
---
-ALTER TABLE `ciselnikFinancniProstredekCleneniv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `financniProstredekCleneniKod` (`financniProstredekCleneniKod`),
-  ADD KEY `financniProstredekCleneniNazev` (`financniProstredekCleneniNazev`);
-
---
--- Indexes for table `ciselnikFinancniZdrojv01`
---
-ALTER TABLE `ciselnikFinancniZdrojv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `financniZdrojKod` (`financniZdrojKod`),
-  ADD KEY `financniZdrojNadrizenyKod` (`financniZdrojNadrizenyKod`),
-  ADD KEY `financniZdrojNazev` (`financniZdrojNazev`);
-
---
--- Indexes for table `ciselnikKrajv010`
---
-ALTER TABLE `ciselnikKrajv010`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `krajKod` (`krajKod`),
-  ADD KEY `krajNazev` (`krajNazev`),
-  ADD KEY `transakceIdentifikator` (`transakceIdentifikator`);
-
---
--- Indexes for table `ciselnikMestskyObvodMestskaCastv01`
---
-ALTER TABLE `ciselnikMestskyObvodMestskaCastv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `mestskyObvodMestskaCastKod` (`mestskyObvodMestskaCastKod`),
-  ADD KEY `transakceIdentifikator` (`transakceIdentifikator`),
-  ADD KEY `mestskyObvodMestskaCastNazev` (`mestskyObvodMestskaCastNazev`);
-
---
--- Indexes for table `ciselnikMmrGrantoveSchemav01`
---
-ALTER TABLE `ciselnikMmrGrantoveSchemav01`
-  ADD PRIMARY KEY (`idGrantoveSchema`),
-  ADD KEY `grantoveSchemaKod` (`grantoveSchemaKod`),
-  ADD KEY `grantoveSchemaNazev` (`grantoveSchemaNazev`),
-  ADD KEY `grantoveSchemaCislo` (`grantoveSchemaCislo`);
-
---
--- Indexes for table `ciselnikMmrOpatreniv01`
---
-ALTER TABLE `ciselnikMmrOpatreniv01`
-  ADD PRIMARY KEY (`idOpatreni`),
-  ADD KEY `idPriorita` (`idPriorita`),
-  ADD KEY `opatreniKod` (`opatreniKod`),
-  ADD KEY `opatreniNazev` (`opatreniNazev`);
-
---
--- Indexes for table `ciselnikMmrOperacniProgramv01`
---
-ALTER TABLE `ciselnikMmrOperacniProgramv01`
-  ADD PRIMARY KEY (`idOperacniProgram`),
-  ADD KEY `operacaniProgramKod` (`operacaniProgramKod`),
-  ADD KEY `operacaniProgramNazev` (`operacaniProgramNazev`);
-
---
--- Indexes for table `ciselnikMmrPodOpatreniv01`
---
-ALTER TABLE `ciselnikMmrPodOpatreniv01`
-  ADD PRIMARY KEY (`idPodOpatreni`),
-  ADD KEY `idOpatreni` (`idOpatreni`),
-  ADD KEY `podOpatreniNazev` (`podOpatreniNazev`);
-
---
--- Indexes for table `ciselnikMmrPrioritav01`
---
-ALTER TABLE `ciselnikMmrPrioritav01`
-  ADD PRIMARY KEY (`idPriorita`),
-  ADD KEY `idOperacniProgram` (`idOperacniProgram`),
-  ADD KEY `idPodprogram` (`idPodprogram`),
-  ADD KEY `prioritaKod` (`prioritaKod`),
-  ADD KEY `prioritaNazev` (`prioritaNazev`);
-
---
--- Indexes for table `ciselnikObecv01`
---
-ALTER TABLE `ciselnikObecv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `obecKod` (`obecKod`),
-  ADD KEY `obecNutsKod` (`obecNutsKod`),
-  ADD KEY `obecNazev` (`obecNazev`),
-  ADD KEY `transakceIdentifikator` (`transakceIdentifikator`);
-
---
--- Indexes for table `ciselnikOkresv01`
---
-ALTER TABLE `ciselnikOkresv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `okresKod` (`okresKod`),
-  ADD KEY `okresNazev` (`okresNazev`),
-  ADD KEY `okresNutsKod` (`okresNutsKod`),
-  ADD KEY `vuscNad` (`vuscNad`),
-  ADD KEY `transakceIdentifikator` (`transakceIdentifikator`);
-
---
--- Indexes for table `ciselnikPravniFormav01`
---
-ALTER TABLE `ciselnikPravniFormav01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pravniFormaKod` (`pravniFormaKod`),
-  ADD KEY `pravniFormaNazev` (`pravniFormaNazev`),
-  ADD KEY `pravniFormaTypKod` (`pravniFormaTypKod`);
-
---
--- Indexes for table `ciselnikProgramv01`
---
-ALTER TABLE `ciselnikProgramv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `programKod` (`programKod`),
-  ADD KEY `programNazev` (`programNazev`);
-
---
--- Indexes for table `ciselnikRozpoctovaSkladbaParagrafv01`
---
-ALTER TABLE `ciselnikRozpoctovaSkladbaParagrafv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `rozpoctovaSkladbaParagrafKod` (`rozpoctovaSkladbaParagrafKod`),
-  ADD KEY `rozpoctovaSkladbaParagrafNazev` (`rozpoctovaSkladbaParagrafNazev`);
-
---
--- Indexes for table `ciselnikRozpoctovaSkladbaPolozkav01`
---
-ALTER TABLE `ciselnikRozpoctovaSkladbaPolozkav01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `rozpoctovaSkladbaPolozkaKod` (`rozpoctovaSkladbaPolozkaKod`),
-  ADD KEY `rozpoctovaSkladbaPolozkaNazev` (`rozpoctovaSkladbaPolozkaNazev`);
-
---
--- Indexes for table `ciselnikStatniRozpocetKapitolav01`
---
-ALTER TABLE `ciselnikStatniRozpocetKapitolav01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
-  ADD KEY `statniRozpocetKapitolaNazev` (`statniRozpocetKapitolaNazev`);
-
---
--- Indexes for table `ciselnikStatniRozpocetUkazatelv01`
---
-ALTER TABLE `ciselnikStatniRozpocetUkazatelv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `statniRozpocetUkazatelKod` (`statniRozpocetUkazatelKod`),
-  ADD KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
-  ADD KEY `statniRozpocetUkazatelNadrizenyKod` (`statniRozpocetUkazatelNadrizenyKod`),
-  ADD KEY `statniRozpocetUkazatelNazev` (`statniRozpocetUkazatelNazev`);
-
---
--- Indexes for table `ciselnikStatv01`
---
-ALTER TABLE `ciselnikStatv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `statKod3Znaky` (`statKod3Znaky`),
-  ADD KEY `statKod3Cisla` (`statKod3Cisla`),
-  ADD KEY `statNazev` (`statNazev`),
-  ADD KEY `statNazevEn` (`statNazevEn`);
-
---
--- Indexes for table `ciselnikUcelZnakv01`
---
-ALTER TABLE `ciselnikUcelZnakv01`
-  ADD PRIMARY KEY (`idUcelZnak`),
-  ADD KEY `ucelZnakKod` (`ucelZnakKod`),
-  ADD KEY `statniRozpocetKapitolaKod` (`statniRozpocetKapitolaKod`),
-  ADD KEY `ucelZnakNazev` (`ucelZnakNazev`);
-
---
--- Indexes for table `ciselnikUcelZnak_DotacniTitulv01`
---
-ALTER TABLE `ciselnikUcelZnak_DotacniTitulv01`
-  ADD UNIQUE KEY `idDotaceTitul` (`idUcelZnak`,`idDotaceTitul`);
-
---
--- Indexes for table `ciselnikVuscv01`
---
-ALTER TABLE `ciselnikVuscv01`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `vuscKod` (`vuscKod`),
-  ADD KEY `krajNutsKod` (`krajNutsKod`),
-  ADD KEY `vuscNazev` (`vuscNazev`),
-  ADD KEY `transakceIdentifikator` (`transakceIdentifikator`);
-
---
--- Indexes for table `Dotace`
---
-ALTER TABLE `Dotace`
-  ADD PRIMARY KEY (`idDotace`),
-  ADD KEY `idPrijemce` (`idPrijemce`),
-  ADD KEY `iriOperacniProgram` (`iriOperacniProgram`),
-  ADD KEY `iriPodprogram` (`iriPodprogram`),
-  ADD KEY `iriOpatreni` (`iriOpatreni`),
-  ADD KEY `iriPriorita` (`iriPriorita`),
-  ADD KEY `iriGrantoveSchema` (`iriGrantoveSchema`),
-  ADD KEY `iriPodopatreni` (`iriPodopatreni`),
-  ADD KEY `iriTypCinnosti` (`iriTypCinnosti`),
-  ADD KEY `iriProgram` (`iriProgram`),
-  ADD KEY `projektNazev` (`projektNazev`),
-  ADD KEY `projektKod` (`projektKod`);
-
---
--- Indexes for table `EkonomikaSubjekt`
---
-ALTER TABLE `EkonomikaSubjekt`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ico` (`ico`);
-
---
--- Indexes for table `Etapa`
---
-ALTER TABLE `Etapa`
-  ADD PRIMARY KEY (`idEtapa`),
-  ADD KEY `idDotace` (`idDotace`),
-  ADD KEY `etapaCislo` (`etapaCislo`),
-  ADD KEY `etapaNazev` (`etapaNazev`);
-
---
--- Indexes for table `Osoba`
---
-ALTER TABLE `Osoba`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `jmeno` (`jmeno`),
-  ADD KEY `prijmeni` (`prijmeni`),
-  ADD KEY `narozeniRok` (`narozeniRok`);
 
 --
 -- Indexes for table `PrijemcePomoci`
 --
-ALTER TABLE `PrijemcePomoci`
-  ADD PRIMARY KEY (`idPrijemce`),
-  ADD KEY `ico` (`ico`),
-  ADD KEY `obchodniJmeno` (`obchodniJmeno`),
-  ADD KEY `iriPravniForma` (`iriPravniForma`),
-  ADD KEY `iriStat` (`iriStat`),
-  ADD KEY `iriOsoba` (`iriOsoba`),
-  ADD KEY `iriEkonomikaSubjekt` (`iriEkonomikaSubjekt`),
-  ADD KEY `rokNarozeni` (`rokNarozeni`);
+ALTER TABLE `PrijemcePomoci` ADD FULLTEXT KEY `prijemce_fulltext` (`obchodniJmeno`,`jmeno`,`prijmeni`);
+COMMIT;
 
---
--- Indexes for table `Rozhodnuti`
---
-ALTER TABLE `Rozhodnuti`
-  ADD PRIMARY KEY (`idRozhodnuti`),
-  ADD KEY `idDotace` (`idDotace`),
-  ADD KEY `iriPoskytovatelDotace` (`iriPoskytovatelDotace`),
-  ADD KEY `iriCleneniFinancnichProstredku` (`iriCleneniFinancnichProstredku`),
-  ADD KEY `iriFinancniZdroj` (`iriFinancniZdroj`),
-  ADD KEY `rokRozhodnuti` (`rokRozhodnuti`),
-  ADD KEY `investiceIndikator` (`investiceIndikator`),
-  ADD KEY `navratnostIndikator` (`navratnostIndikator`),
-  ADD KEY `castkaRozhodnuta` (`castkaRozhodnuta`),
-  ADD KEY `castkaPozadovana` (`castkaPozadovana`);
-
---
--- Indexes for table `RozhodnutiSmlouva`
---
-ALTER TABLE `RozhodnutiSmlouva`
-  ADD PRIMARY KEY (`idSmlouva`),
-  ADD KEY `idRozhodnuti` (`idRozhodnuti`),
-  ADD KEY `cisloJednaciRozhodnuti` (`cisloJednaciRozhodnuti`),
-  ADD KEY `rozhodnutiDatum` (`rozhodnutiDatum`);
-
---
--- Indexes for table `RozpoctoveObdobi`
---
-ALTER TABLE `RozpoctoveObdobi`
-  ADD PRIMARY KEY (`idObdobi`),
-  ADD KEY `idRozhodnuti` (`idRozhodnuti`),
-  ADD KEY `castkaCerpana` (`castkaCerpana`),
-  ADD KEY `castkaUvolnena` (`castkaUvolnena`),
-  ADD KEY `castkaVracena` (`castkaVracena`),
-  ADD KEY `castkaSpotrebovana` (`castkaSpotrebovana`),
-  ADD KEY `rozpoctoveObdobi` (`rozpoctoveObdobi`),
-  ADD KEY `iriDotacniTitul` (`iriDotacniTitul`),
-  ADD KEY `iriUcelovyZnak` (`iriUcelovyZnak`);
-
---
--- Indexes for table `SplatkaKalendar`
---
-ALTER TABLE `SplatkaKalendar`
-  ADD PRIMARY KEY (`idSKalendar`),
-  ADD KEY `idRozhodnuti` (`idRozhodnuti`),
-  ADD KEY `castkaSplatkaPlanovana` (`castkaSplatkaPlanovana`),
-  ADD KEY `castkaSplatkaSkutecna` (`castkaSplatkaSkutecna`);
-
---
--- Indexes for table `UzemniRealizace`
---
-ALTER TABLE `UzemniRealizace`
-  ADD PRIMARY KEY (`idUzemi`),
-  ADD KEY `idDotace` (`idDotace`),
-  ADD KEY `iriRealizovanNaUzemiStatu` (`iriRealizovanNaUzemiStatu`),
-  ADD KEY `iriCastObce` (`iriCastObce`),
-  ADD KEY `iriKraj` (`iriKraj`),
-  ADD KEY `iriMestskyObvodMestskaCast` (`iriMestskyObvodMestskaCast`),
-  ADD KEY `iriObec` (`iriObec`),
-  ADD KEY `iriOkres` (`iriOkres`),
-  ADD KEY `iriVusc` (`iriVusc`),
-  ADD KEY `okresNutsKod` (`okresNutsKod`),
-  ADD KEY `adresniMistoKod` (`adresniMistoKod`),
-  ADD KEY `stavebniObjektKod` (`stavebniObjektKod`),
-  ADD KEY `uliceKod` (`uliceKod`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `cache`
---
-ALTER TABLE `cache`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 

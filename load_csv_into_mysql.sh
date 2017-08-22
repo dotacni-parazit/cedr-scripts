@@ -11,6 +11,7 @@ MYSQLCMD="LOAD DATA LOCAL INFILE 'FPATH' INTO TABLE $DBNAME.TABLENAME CHARACTER 
 
 PROTOTYPES=$(cat download.sh | awk '{print $3}' | grep "csv.7z" | awk -F '/' '{print $NF}' | sed 's/\.csv\.7z//gi' | tr -d '"')
 PROTOTYPES+=( "ciselnikUcelZnak_DotacniTitulv01" "ciselnikDotaceTitul_StatniRozpocetUkazatelv01" "ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01" )
+#PROTOTYPES=( "Rozhodnuti" )
 
 #for prot in ${PROTOTYPES[@]}; do
 #  echo $prot
