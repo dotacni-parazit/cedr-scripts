@@ -4,3 +4,4 @@
 generateCsv.7Z
 *.bat
 /sql
+/sql_truncate
