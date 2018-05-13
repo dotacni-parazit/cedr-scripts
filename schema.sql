@@ -1,16 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.3
+-- version 4.8.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Aug 22, 2017 at 07:04 PM
--- Server version: 10.1.26-MariaDB-1~stretch
--- PHP Version: 7.0.19-1
+-- Host: 127.0.0.1
+-- Generation Time: May 13, 2018 at 12:07 PM
+-- Server version: 10.2.14-MariaDB-10.2.14+maria~stretch-log
+-- PHP Version: 7.0.27-0+deb9u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `cedr`
@@ -475,13 +481,20 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrPodOpatreniv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrPopdprogramv01`
+-- Table structure for table `ciselnikMmrPodprogramv01`
 --
 
-DROP TABLE IF EXISTS `ciselnikMmrPopdprogramv01`;
-CREATE TABLE IF NOT EXISTS `ciselnikMmrPopdprogramv01` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
+DROP TABLE IF EXISTS `ciselnikMmrPodprogramv01`;
+CREATE TABLE IF NOT EXISTS `ciselnikMmrPodprogramv01` (
+  `idPodprogram` varchar(111) NOT NULL,
+  `idOperacniProgram` varchar(116) NOT NULL,
+  `podprogramKod` varchar(19) NOT NULL,
+  `podprogramNazev` varchar(155) NOT NULL,
+  `podprogramCislo` tinyint(1) DEFAULT NULL,
+  `zaznamPlatnostOdDatum` datetime DEFAULT NULL,
+  `zaznamPlatnostDoDatum` datetime DEFAULT NULL,
+  PRIMARY KEY (`idPodprogram`),
+  KEY `idOperacniProgram` (`idOperacniProgram`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -685,7 +698,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikStatniRozpocetKapitolav01` (
 DROP TABLE IF EXISTS `ciselnikStatniRozpocetUkazatelv01`;
 CREATE TABLE IF NOT EXISTS `ciselnikStatniRozpocetUkazatelv01` (
   `id` varchar(109) NOT NULL,
-  `idStatniRozpocetKapitola` tinyint(1) DEFAULT NULL,
+  `idStatniRozpocetKapitola` varchar(120) DEFAULT NULL,
   `statniRozpocetUkazatelKod` varchar(12) NOT NULL,
   `statniRozpocetKapitolaKod` decimal(10,0) NOT NULL,
   `statniRozpocetUkazatelNadrizenyKod` varchar(12) DEFAULT NULL,
@@ -795,10 +808,10 @@ CREATE TABLE IF NOT EXISTS `Dotace` (
   `projektKod` varchar(38) DEFAULT NULL,
   `podpisDatum` datetime NOT NULL,
   `subjektRozliseniKod` decimal(10,0) DEFAULT NULL,
-  `ukonceniPlanovaneDatum` datetime NULL DEFAULT NULL,
-  `ukonceniSkutecneDatum` datetime NULL DEFAULT NULL,
-  `zahajeniPlanovaneDatum` datetime NULL DEFAULT NULL,
-  `zahajeniSkutecneDatum` datetime NULL DEFAULT NULL,
+  `ukonceniPlanovaneDatum` datetime DEFAULT NULL,
+  `ukonceniSkutecneDatum` datetime DEFAULT NULL,
+  `zahajeniPlanovaneDatum` datetime DEFAULT NULL,
+  `zahajeniSkutecneDatum` datetime DEFAULT NULL,
   `zmenaSmlouvyIndikator` tinyint(1) NOT NULL,
   `projektIdnetifikator` varchar(80) NOT NULL,
   `projektNazev` varchar(255) DEFAULT NULL,
@@ -811,8 +824,8 @@ CREATE TABLE IF NOT EXISTS `Dotace` (
   `iriProgramPodpora` varchar(120) DEFAULT NULL,
   `iriTypCinnosti` varchar(120) DEFAULT NULL,
   `iriProgram` varchar(120) DEFAULT NULL,
-  `dPlatnost` datetime NULL DEFAULT NULL,
-  `dtAktualizace` datetime NULL DEFAULT NULL,
+  `dPlatnost` datetime DEFAULT NULL,
+  `dtAktualizace` datetime DEFAULT NULL,
   PRIMARY KEY (`idDotace`),
   KEY `idPrijemce` (`idPrijemce`),
   KEY `iriOperacniProgram` (`iriOperacniProgram`),
@@ -958,7 +971,7 @@ DROP TABLE IF EXISTS `RozhodnutiSmlouva`;
 CREATE TABLE IF NOT EXISTS `RozhodnutiSmlouva` (
   `idSmlouva` varchar(40) NOT NULL,
   `idRozhodnuti` varchar(40) NOT NULL,
-  `cisloJednaciRozhodnuti` varchar(29) NOT NULL,
+  `cisloJednaciRozhodnuti` varchar(64) NOT NULL,
   `dokumentDruhKod` tinyint(1) NOT NULL,
   `rozhodnutiDatum` datetime NOT NULL,
   `dtAktualizace` datetime NOT NULL,
@@ -1075,4 +1088,8 @@ ALTER TABLE `AdresaBydliste` ADD FULLTEXT KEY `obecNazev` (`obecNazev`);
 --
 ALTER TABLE `PrijemcePomoci` ADD FULLTEXT KEY `prijemce_fulltext` (`obchodniJmeno`,`jmeno`,`prijmeni`);
 COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 

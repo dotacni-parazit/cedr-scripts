@@ -60,7 +60,7 @@ $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrGrantoveSchema
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrOpatreniv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrOperacniProgramv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrPodOpatreniv01.csv.7z"
-$DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrPopdprogramv01.csv.7z"
+$DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrPodprogramv01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrPrioritav01.csv.7z"
 $DOWNLOADER $PARAMS	"http://cedropendata.mfcr.cz/c3lod/ciselnikMmrProgramPodporav01.csv.7z"
 
