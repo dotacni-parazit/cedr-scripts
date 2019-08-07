@@ -20,6 +20,8 @@ PROTOTYPES+=( "ciselnikUcelZnak_DotacniTitulv01" "ciselnikDotaceTitul_StatniRozp
 
 shopt -s extglob
 
+echo "\W" >> sql
+
 for prot in ${PROTOTYPES[@]}; do
   TOMERGE="$(ls -1v ./CSV/${prot}+([0-9]).csv)"
   echo $(echo $MYSQLPRECMD | sed "s/TABLENAME/$prot/gi") >> sql
