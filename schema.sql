@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0.1
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 13, 2018 at 12:07 PM
--- Server version: 10.2.14-MariaDB-10.2.14+maria~stretch-log
--- PHP Version: 7.0.27-0+deb9u1
+-- Počítač: 127.0.0.1
+-- Vytvořeno: Stř 07. srp 2019, 13:28
+-- Verze serveru: 10.3.15-MariaDB-1-log
+-- Verze PHP: 7.3.4-2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,15 +19,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cedr`
+-- Databáze: `cedr`
 --
+DROP DATABASE IF EXISTS `cedr`;
 CREATE DATABASE IF NOT EXISTS `cedr` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `cedr`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `AdresaBydliste`
+-- Struktura tabulky `AdresaBydliste`
 --
 
 DROP TABLE IF EXISTS `AdresaBydliste`;
@@ -50,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `AdresaBydliste` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `AdresaSidlo`
+-- Struktura tabulky `AdresaSidlo`
 --
 
 DROP TABLE IF EXISTS `AdresaSidlo`;
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `AdresaSidlo` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrCinnostTypev01`
+-- Struktura tabulky `ciselnikCedrCinnostTypev01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrCinnostTypev01`;
@@ -98,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrCinnostTypev01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrGrantoveSchemav01`
+-- Struktura tabulky `ciselnikCedrGrantoveSchemav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrGrantoveSchemav01`;
@@ -117,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrGrantoveSchemav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrOpatreniv01`
+-- Struktura tabulky `ciselnikCedrOpatreniv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrOpatreniv01`;
@@ -139,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrOpatreniv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrOperacniProgramv01`
+-- Struktura tabulky `ciselnikCedrOperacniProgramv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrOperacniProgramv01`;
@@ -159,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrOperacniProgramv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrPodOpatreniv01`
+-- Struktura tabulky `ciselnikCedrPodOpatreniv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrPodOpatreniv01`;
@@ -180,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrPodOpatreniv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrPodprogramv01`
+-- Struktura tabulky `ciselnikCedrPodprogramv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrPodprogramv01`;
@@ -192,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrPodprogramv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrPrioritav01`
+-- Struktura tabulky `ciselnikCedrPrioritav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrPrioritav01`;
@@ -216,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrPrioritav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikCedrProgramPodporav01`
+-- Struktura tabulky `ciselnikCedrProgramPodporav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikCedrProgramPodporav01`;
@@ -228,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikCedrProgramPodporav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikDotacePoskytovatelv01`
+-- Struktura tabulky `ciselnikDotacePoskytovatelv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikDotacePoskytovatelv01`;
@@ -248,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikDotacePoskytovatelv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikDotaceTitulv01`
+-- Struktura tabulky `ciselnikDotaceTitulv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikDotaceTitulv01`;
@@ -271,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitulv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01`
+-- Struktura tabulky `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01`;
@@ -285,7 +286,21 @@ CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikDotaceTitul_StatniRozpocetUkazatelv01`
+-- Struktura tabulky `ciselnikDotaceTitul_RozpoctovaSkladbaPolozkav01`
+--
+
+DROP TABLE IF EXISTS `ciselnikDotaceTitul_RozpoctovaSkladbaPolozkav01`;
+CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitul_RozpoctovaSkladbaPolozkav01` (
+  `idDotaceTitul` varchar(120) NOT NULL,
+  `idRozpoctovaSkladbaPolozka` varchar(120) NOT NULL,
+  KEY `idDotaceTitul` (`idDotaceTitul`),
+  KEY `idRozpoctovaSkladbaPolozka` (`idRozpoctovaSkladbaPolozka`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `ciselnikDotaceTitul_StatniRozpocetUkazatelv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikDotaceTitul_StatniRozpocetUkazatelv01`;
@@ -299,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikDotaceTitul_StatniRozpocetUkazatelv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikFinancniProstredekCleneniv01`
+-- Struktura tabulky `ciselnikFinancniProstredekCleneniv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikFinancniProstredekCleneniv01`;
@@ -317,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikFinancniProstredekCleneniv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikFinancniZdrojv01`
+-- Struktura tabulky `ciselnikFinancniZdrojv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikFinancniZdrojv01`;
@@ -338,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikFinancniZdrojv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikKrajv01`
+-- Struktura tabulky `ciselnikKrajv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikKrajv01`;
@@ -360,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikKrajv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMestskyObvodMestskaCastv01`
+-- Struktura tabulky `ciselnikMestskyObvodMestskaCastv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMestskyObvodMestskaCastv01`;
@@ -389,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMestskyObvodMestskaCastv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrCinnostTypev01`
+-- Struktura tabulky `ciselnikMmrCinnostTypev01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrCinnostTypev01`;
@@ -401,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrCinnostTypev01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrGrantoveSchemav01`
+-- Struktura tabulky `ciselnikMmrGrantoveSchemav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrGrantoveSchemav01`;
@@ -421,7 +436,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrGrantoveSchemav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrOpatreniv01`
+-- Struktura tabulky `ciselnikMmrOpatreniv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrOpatreniv01`;
@@ -442,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrOpatreniv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrOperacniProgramv01`
+-- Struktura tabulky `ciselnikMmrOperacniProgramv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrOperacniProgramv01`;
@@ -450,7 +465,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrOperacniProgramv01` (
   `idOperacniProgram` varchar(116) NOT NULL,
   `operacaniProgramKod` varchar(15) NOT NULL,
   `operacaniProgramNazev` varchar(91) NOT NULL,
-  `operacaniProgramCislo` date DEFAULT NULL,
+  `operacaniProgramCislo` tinyint(1) DEFAULT NULL,
   `zaznamPlatnostOdDatum` datetime NOT NULL,
   `zaznamPlatnostDoDatum` datetime NOT NULL,
   PRIMARY KEY (`idOperacniProgram`),
@@ -461,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrOperacniProgramv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrPodOpatreniv01`
+-- Struktura tabulky `ciselnikMmrPodOpatreniv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrPodOpatreniv01`;
@@ -481,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrPodOpatreniv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrPodprogramv01`
+-- Struktura tabulky `ciselnikMmrPodprogramv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrPodprogramv01`;
@@ -500,7 +515,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrPodprogramv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrPrioritav01`
+-- Struktura tabulky `ciselnikMmrPrioritav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrPrioritav01`;
@@ -523,7 +538,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrPrioritav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikMmrProgramPodporav01`
+-- Struktura tabulky `ciselnikMmrProgramPodporav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikMmrProgramPodporav01`;
@@ -535,7 +550,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikMmrProgramPodporav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikObecv01`
+-- Struktura tabulky `ciselnikObecv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikObecv01`;
@@ -569,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikObecv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikOkresv01`
+-- Struktura tabulky `ciselnikOkresv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikOkresv01`;
@@ -599,7 +614,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikOkresv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikPravniFormav01`
+-- Struktura tabulky `ciselnikPravniFormav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikPravniFormav01`;
@@ -620,7 +635,28 @@ CREATE TABLE IF NOT EXISTS `ciselnikPravniFormav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikProgramv01`
+-- Struktura tabulky `ciselnikPravniFormav02`
+--
+
+DROP TABLE IF EXISTS `ciselnikPravniFormav02`;
+CREATE TABLE IF NOT EXISTS `ciselnikPravniFormav02` (
+  `id` varchar(85) NOT NULL,
+  `pravniFormaKod` decimal(10,0) NOT NULL,
+  `pravniFormaNazev` varchar(117) NOT NULL,
+  `pravniFormaNazevZkraceny` varchar(3) NOT NULL,
+  `pravniFormaTypKod` decimal(10,0) NOT NULL,
+  `zaznamPlatnostOdDatum` datetime NOT NULL,
+  `zaznamPlatnostDoDatum` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pravniFormaKod` (`pravniFormaKod`),
+  KEY `pravniFormaNazev` (`pravniFormaNazev`),
+  KEY `pravniFormaTypKod` (`pravniFormaTypKod`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `ciselnikProgramv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikProgramv01`;
@@ -638,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikProgramv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikRozpoctovaSkladbaParagrafv01`
+-- Struktura tabulky `ciselnikRozpoctovaSkladbaParagrafv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikRozpoctovaSkladbaParagrafv01`;
@@ -656,7 +692,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikRozpoctovaSkladbaParagrafv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikRozpoctovaSkladbaPolozkav01`
+-- Struktura tabulky `ciselnikRozpoctovaSkladbaPolozkav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikRozpoctovaSkladbaPolozkav01`;
@@ -674,7 +710,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikRozpoctovaSkladbaPolozkav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikStatniRozpocetKapitolav01`
+-- Struktura tabulky `ciselnikStatniRozpocetKapitolav01`
 --
 
 DROP TABLE IF EXISTS `ciselnikStatniRozpocetKapitolav01`;
@@ -692,7 +728,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikStatniRozpocetKapitolav01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikStatniRozpocetUkazatelv01`
+-- Struktura tabulky `ciselnikStatniRozpocetUkazatelv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikStatniRozpocetUkazatelv01`;
@@ -715,7 +751,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikStatniRozpocetUkazatelv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikStatv01`
+-- Struktura tabulky `ciselnikStatv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikStatv01`;
@@ -740,7 +776,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikStatv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikUcelZnakv01`
+-- Struktura tabulky `ciselnikUcelZnakv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikUcelZnakv01`;
@@ -760,7 +796,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikUcelZnakv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikUcelZnak_DotacniTitulv01`
+-- Struktura tabulky `ciselnikUcelZnak_DotacniTitulv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikUcelZnak_DotacniTitulv01`;
@@ -774,7 +810,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikUcelZnak_DotacniTitulv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ciselnikVuscv01`
+-- Struktura tabulky `ciselnikVuscv01`
 --
 
 DROP TABLE IF EXISTS `ciselnikVuscv01`;
@@ -798,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `ciselnikVuscv01` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Dotace`
+-- Struktura tabulky `Dotace`
 --
 
 DROP TABLE IF EXISTS `Dotace`;
@@ -843,7 +879,7 @@ CREATE TABLE IF NOT EXISTS `Dotace` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `EkonomikaSubjekt`
+-- Struktura tabulky `EkonomikaSubjekt`
 --
 
 DROP TABLE IF EXISTS `EkonomikaSubjekt`;
@@ -857,7 +893,7 @@ CREATE TABLE IF NOT EXISTS `EkonomikaSubjekt` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Etapa`
+-- Struktura tabulky `Etapa`
 --
 
 DROP TABLE IF EXISTS `Etapa`;
@@ -881,7 +917,7 @@ CREATE TABLE IF NOT EXISTS `Etapa` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Osoba`
+-- Struktura tabulky `Osoba`
 --
 
 DROP TABLE IF EXISTS `Osoba`;
@@ -900,7 +936,7 @@ CREATE TABLE IF NOT EXISTS `Osoba` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `PrijemcePomoci`
+-- Struktura tabulky `PrijemcePomoci`
 --
 
 DROP TABLE IF EXISTS `PrijemcePomoci`;
@@ -930,7 +966,7 @@ CREATE TABLE IF NOT EXISTS `PrijemcePomoci` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Rozhodnuti`
+-- Struktura tabulky `Rozhodnuti`
 --
 
 DROP TABLE IF EXISTS `Rozhodnuti`;
@@ -964,7 +1000,7 @@ CREATE TABLE IF NOT EXISTS `Rozhodnuti` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `RozhodnutiSmlouva`
+-- Struktura tabulky `RozhodnutiSmlouva`
 --
 
 DROP TABLE IF EXISTS `RozhodnutiSmlouva`;
@@ -984,7 +1020,7 @@ CREATE TABLE IF NOT EXISTS `RozhodnutiSmlouva` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `RozpoctoveObdobi`
+-- Struktura tabulky `RozpoctoveObdobi`
 --
 
 DROP TABLE IF EXISTS `RozpoctoveObdobi`;
@@ -1015,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `RozpoctoveObdobi` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `SplatkaKalendar`
+-- Struktura tabulky `SplatkaKalendar`
 --
 
 DROP TABLE IF EXISTS `SplatkaKalendar`;
@@ -1035,7 +1071,7 @@ CREATE TABLE IF NOT EXISTS `SplatkaKalendar` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `UzemniRealizace`
+-- Struktura tabulky `UzemniRealizace`
 --
 
 DROP TABLE IF EXISTS `UzemniRealizace`;
@@ -1075,21 +1111,45 @@ CREATE TABLE IF NOT EXISTS `UzemniRealizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Indexes for dumped tables
+-- Klíče pro exportované tabulky
 --
 
 --
--- Indexes for table `AdresaBydliste`
+-- Klíče pro tabulku `AdresaBydliste`
 --
 ALTER TABLE `AdresaBydliste` ADD FULLTEXT KEY `obecNazev` (`obecNazev`);
 
 --
--- Indexes for table `PrijemcePomoci`
+-- Klíče pro tabulku `ciselnikDotacePoskytovatelv01`
+--
+ALTER TABLE `ciselnikDotacePoskytovatelv01` ADD FULLTEXT KEY `dotacePoskytovatelNazev_2` (`dotacePoskytovatelNazev`);
+
+--
+-- Klíče pro tabulku `ciselnikDotaceTitulv01`
+--
+ALTER TABLE `ciselnikDotaceTitulv01` ADD FULLTEXT KEY `dotaceTitulNazev_2` (`dotaceTitulNazev`);
+
+--
+-- Klíče pro tabulku `ciselnikFinancniZdrojv01`
+--
+ALTER TABLE `ciselnikFinancniZdrojv01` ADD FULLTEXT KEY `financniZdrojNazev_2` (`financniZdrojNazev`);
+
+--
+-- Klíče pro tabulku `PrijemcePomoci`
 --
 ALTER TABLE `PrijemcePomoci` ADD FULLTEXT KEY `prijemce_fulltext` (`obchodniJmeno`,`jmeno`,`prijmeni`);
+
+--
+-- Omezení pro exportované tabulky
+--
+
+--
+-- Omezení pro tabulku `ciselnikMmrPodprogramv01`
+--
+ALTER TABLE `ciselnikMmrPodprogramv01`
+  ADD CONSTRAINT `ciselnikMmrPodprogramv01_ibfk_1` FOREIGN KEY (`idOperacniProgram`) REFERENCES `ciselnikMmrOperacniProgramv01` (`idOperacniProgram`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
