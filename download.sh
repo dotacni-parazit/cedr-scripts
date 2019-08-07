@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PARAMS="-c -nv -P GZ/"
+PARAMS="-c -P GZ/"
 DOWNLOADER="wget"
 
 mkdir -p GZ
