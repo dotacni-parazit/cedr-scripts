@@ -1,36 +1,28 @@
 #!/bin/bash
 
-DBUSER="root"
-DBPASS="71eb647e30e1e93886d63ceb8a172814065be75b"
-DBNAME="cedr"
-DBHOST="localhost"
 CURPWD=$(pwd)
-SHELLCMD="mysql -u$DBUSER -p$DBPASS -h$DBHOST $DBNAME -Be"
 MYSQLPRECMD="TRUNCATE $DBNAME.TABLENAME;"
 MYSQLCMD="LOAD DATA LOCAL INFILE 'FPATH' INTO TABLE $DBNAME.TABLENAME CHARACTER SET UTF8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' IGNORE 1 ROWS;"
 
-PROTOTYPES=$(cat download.sh | awk '{print $3}' | grep "csv.7z" | awk -F '/' '{print $NF}' | sed 's/\.csv\.7z//gi' | tr -d '"')
-PROTOTYPES+=( "ciselnikUcelZnak_DotacniTitulv01" "ciselnikDotaceTitul_StatniRozpocetUkazatelv01" "ciselnikDotaceTitul_RozpoctovaSkladbaParagrafv01" )
-#PROTOTYPES=( "Rozhodnuti" )
-
-#for prot in ${PROTOTYPES[@]}; do
-#  echo $prot
-#done
-#exit 0
+cd CSV
+PROTOTYPES=$(ls -1 *.csv | sed 's/\.csv//gi')
+cd ..
 
 shopt -s extglob
 
-echo "\W" >> sql
+echo "\W" > sql
 
+# Truncating full DB
+echo "SET FOREIGN_KEY_CHECKS=0;" >> sql
 for prot in ${PROTOTYPES[@]}; do
-  TOMERGE="$(ls -1v ./CSV/${prot}+([0-9]).csv)"
-  echo $(echo $MYSQLPRECMD | sed "s/TABLENAME/$prot/gi") >> sql
-  for file in ${TOMERGE}; do
-    MCMD=$(echo $MYSQLCMD | sed "s|FPATH|$file|gi" | sed "s/TABLENAME/$prot/gi")
-    echo $MCMD >> sql
-    #eval ${SHELLCMD} ${MCMD}
-    #exit 0
-  done
+  echo $(echo $MYSQLPRECMD | sed "s/TABLENAME/${prot}/gi") >> sql
+done
+echo "SET FOREIGN_KEY_CHECKS=1;" >> sql
+
+# Importing CSVs
+for prot in ${PROTOTYPES[@]}; do
+  MCMD=$(echo $MYSQLCMD | sed "s/FPATH/CSV\/${prot}\.csv/gi" | sed "s/TABLENAME/${prot}/gi")
+  echo $MCMD >> sql
 done
 
 exit 0
